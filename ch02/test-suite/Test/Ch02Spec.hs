@@ -7,6 +7,7 @@ module Test.Ch02Spec
   ) where
 
 import Ch02
+import Data.Ratio ((%))
 import Prelude
 import Test.Hspec
 
@@ -151,3 +152,39 @@ spec = do
           T (T (T E 1 E) 2 E)
             3
             (T (T E 4 E) 5 E)
+    describe "takeDepth" do
+      it "[]" do
+        takeDepth 0 (fromList []) `shouldBe` E
+        takeDepth 1 (fromList []) `shouldBe` E
+      it "[1]" do
+        takeDepth 0 (fromList [1]) `shouldBe` E
+        takeDepth 1 (fromList [1]) `shouldBe` T E 1 E
+        takeDepth 2 (fromList [1]) `shouldBe` T E 1 E
+      it "[1..2]" do
+        takeDepth 0 (fromList [1..2]) `shouldBe` E
+        takeDepth 1 (fromList [1..2]) `shouldBe` T E 2 E
+        takeDepth 2 (fromList [1..2]) `shouldBe` T (T E 1 E) 2 E
+        takeDepth 3 (fromList [1..2]) `shouldBe` T (T E 1 E) 2 E
+      it "[1..3]" do
+        takeDepth 0 (fromList [1..3]) `shouldBe` E
+        takeDepth 1 (fromList [1..3]) `shouldBe` T E 2 E
+        takeDepth 2 (fromList [1..3]) `shouldBe` T (T E 1 E) 2 (T E 3 E)
+        takeDepth 3 (fromList [1..3]) `shouldBe` T (T E 1 E) 2 (T E 3 E)
+    describe "infinite" do
+      it "works" do
+        takeDepth 0 infinite `shouldBe` E
+        takeDepth 1 infinite `shouldBe` T E (1 % 2) E
+        takeDepth 2 infinite `shouldBe` T (T E (1 % 4) E) (1 % 2) (T E (3 % 4) E)
+        takeDepth 3 infinite `shouldBe`
+          T
+            (T
+              (T E (1 % 8) E)
+              (1 % 4)
+              (T E (3 % 8) E)
+            )
+            (1 % 2)
+            (T
+              (T E (5 % 8) E)
+              (3 % 4)
+              (T E (7 % 8) E)
+            )

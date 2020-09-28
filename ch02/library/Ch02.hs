@@ -29,9 +29,11 @@ module Ch02
     -- *** 2.6
     -- ** Miscellaneous
   , fromList
+  , infinite
+  , takeDepth
   ) where
 
-import Prelude hiding (lookup)
+import Prelude hiding (lookup, max, min)
 import qualified Data.List as List
 import qualified Data.Maybe as Maybe
 
@@ -242,7 +244,26 @@ fromList = \case
     left = fromList $ take idx ys
     right = fromList $ drop (1 + idx) ys
     idx = length ys `div` 2
-    ys = List.sort xs
+    ys = List.nub $ List.sort xs
+
+-- | Creates an infinite, balanced, valid 'UnbalancedSet' - no duplicates and
+-- sorted appropriately.
+infinite :: UnbalancedSet Rational
+infinite = go 0 1 where
+  go :: Rational -> Rational -> UnbalancedSet Rational
+  go min max = T left x right where
+    left = go min x
+    right = go x max
+    x = (min + max) / 2
+
+-- | Takes @depth@ levels from the 'UnbalancedSet'.
+takeDepth :: Int -> UnbalancedSet a -> UnbalancedSet a
+takeDepth depth set
+  | depth < 1 = E
+  | otherwise =
+      case set of
+        E -> E
+        T a x b -> T (takeDepth (depth - 1) a) x (takeDepth (depth - 1) b)
 
 --(++) :: [a] -> [a] -> [a]
 --(++) xs ys =
