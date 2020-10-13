@@ -1,0 +1,62 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 39f68cf7373c0ffab49113177a92b2232ff5422380710095aa317b3a3024c7ee
+
+name:           ch03
+version:        0.1.0
+homepage:       https://github.com/jship/okasaki-party#readme
+bug-reports:    https://github.com/jship/okasaki-party/issues
+author:         Jason Shipman
+maintainer:     Jason Shipman
+copyright:      2020 (c) Jason Shipman
+build-type:     Simple
+extra-source-files:
+    package.yaml
+
+source-repository head
+  type: git
+  location: https://github.com/jship/okasaki-party
+
+library
+  exposed-modules:
+      Ch03.BinomialHeap
+      Ch03.BinomialHeapTopLevelRank
+      Ch03.Heaps
+      Ch03.LeftistHeap
+      Ch03.RedBlackTree
+      Ch03.Sets
+      Ch03.WeightBiasedLeftistHeap
+  other-modules:
+      Paths_ch03
+  hs-source-dirs:
+      library
+  ghc-options: -Wall -fwarn-tabs -Wincomplete-uni-patterns -Wredundant-constraints
+  build-depends:
+      base
+    , pretty-simple
+  default-language: Haskell2010
+
+test-suite ch03-test-suite
+  type: exitcode-stdio-1.0
+  main-is: Driver.hs
+  other-modules:
+      Test.Ch03.BinomialHeapSpec
+      Test.Ch03.BinomialHeapTopLevelRankSpec
+      Test.Ch03.LeftistHeapSpec
+      Test.Ch03.RedBlackTreeSpec
+      Test.Ch03.WeightBiasedLeftistHeapSpec
+      Paths_ch03
+  hs-source-dirs:
+      test-suite
+  ghc-options: -Wall -fwarn-tabs -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts "-with-rtsopts=-N -T"
+  build-tool-depends:
+      hspec-discover:hspec-discover
+  build-depends:
+      base
+    , ch03
+    , hspec
+  default-language: Haskell2010
